@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      GitHub Pages project sites are often opened as .../RepoName (no trailing slash).
+      Then relative paths resolve to the domain root. This sets <base href> to the site folder.
+    -->
+    <script>
+      (function () {
+        var p = window.location.pathname;
+        if (!p.endsWith("/")) {
+          var last = p.slice(p.lastIndexOf("/") + 1);
+          if (/\.html?$/i.test(last)) {
+            p = p.replace(/\/[^/]+$/, "/");
+          } else {
+            p += "/";
+          }
+        }
+        var b = document.createElement("base");
+        b.href = window.location.origin + p;
+        var ch = document.querySelector("meta[charset]");
+        if (ch) ch.insertAdjacentElement("afterend", b);
+        else document.head.insertBefore(b, document.head.firstChild);
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stranger mind — dev diary by den_chill</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="site-main">
+      <div class="content-shell">
+        <!-- Scrolls away with the page (not sticky) — wider + distinct from dev posts -->
+        <article class="intro-card" aria-label="About the game and demo">
+          <h1 class="intro-card__title">Stranger mind by den_chill</h1>
+          <p class="intro-card__lead">
+            I'm creating an atmospheric 2D game in Unity, and this is my development blog.
+            Everyone is welcome to check out the demo version of my game, and I welcome your
+            feedback on my social media.
+          </p>
+          <p class="intro-card__story">
+            You've landed on an unknown planet and must find a way to escape. You'll be aided
+            by a mysterious stranger who knows things about this planet you don't. You need to
+            use the second dimension to overcome high walls and deep holes.
+          </p>
+          <div class="intro-card__demo">
+            <a class="intro-card__download" id="demo-download-link" href="#">
+              Link to demo version (ZIP)
+            </a>
+            <p class="intro-card__demo-note">
+              You cannot download the game on a phone — use a desktop or laptop browser. The
+              download link is disabled on small screens.
+            </p>
+            <p class="intro-card__demo-hint" id="demo-config-hint" hidden>
+              Set <code>demoZipUrl</code> in <code>posts.js</code> to enable the download link on
+              desktop.
+            </p>
+          </div>
+        </article>
+
+        <div class="content-shell__posts">
+          <div id="posts-root" class="posts-root"></div>
+          <p id="posts-empty" class="posts-empty">No posts yet.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p class="site-footer__title">Social media</p>
+        <ul class="social-list" id="social-list"></ul>
+      </div>
+    </footer>
+
+    <script src="posts.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
