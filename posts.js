@@ -28,10 +28,9 @@
 
     /** Footer links — use full URLs in href. */
     social: [
-      { label: "Twitter / X", href: "" },
+      { label: "Telegram (only for russian users)", href: "https://t.me/justChillDen" },
       { label: "Discord", href: "" },
-      { label: "YouTube", href: "" },
-      { label: "itch.io", href: "" },
+      { label: "Game Jolt", href: "" },
     ],
   };
 
