@@ -20,6 +20,13 @@
   box-sizing: border-box;
 }
 
+/* ФИКС: Глобальное ограничение для всех изображений и гифок */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -167,6 +174,7 @@ body {
   border: 1px solid var(--border-post);
   border-radius: var(--radius);
   padding: 1.15rem 1.15rem 1.35rem;
+  overflow: hidden; /* ФИКС: предотвращает вылет контента за границы карточки */
 }
 
 .post__meta {
@@ -194,6 +202,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  min-width: 0; /* ФИКС: заставляет колонку сжиматься под размер картинки */
 }
 
 .post__main-photo {
@@ -210,6 +219,7 @@ body {
 .post__main-photo img {
   display: block;
   width: 100%;
+  max-width: 100%; /* ФИКС: картинка не может быть больше контейнера */
   height: auto;
 }
 
@@ -228,6 +238,7 @@ body {
   background: var(--bg);
   padding: 0.45rem 2.35rem 1.6rem;
   min-height: 100px;
+  overflow: hidden;
 }
 
 .post__gallery:not(:has(.post__gallery-dots)) {
@@ -259,7 +270,7 @@ body {
 
 .post__gallery-frame img {
   display: block;
-  max-width: 100%;
+  max-width: 100%; /* ФИКС: картинка не может быть больше контейнера */
   height: auto;
 }
 
@@ -328,7 +339,7 @@ body {
 }
 
 .post__body-col {
-  min-width: 0;
+  min-width: 0; /* ФИКС: предотвращает распирание текстовой колонки */
 }
 
 .post__body {
@@ -339,6 +350,7 @@ body {
   font-size: 0.92rem;
   color: var(--text);
   min-height: 4rem;
+  word-wrap: break-word; /* ФИКС: перенос длинных слов */
 }
 
 .post__body p {
