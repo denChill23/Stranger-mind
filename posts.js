@@ -30,7 +30,6 @@
     social: [
       { label: "Telegram (only for russian users)", href: "https://t.me/justChillDen" },
       { label: "Discord", href: "" },
-      { label: "Game Jolt", href: "" },
     ],
   };
 
