@@ -20,15 +20,17 @@
   box-sizing: border-box;
 }
 
-/* ФИКС: Глобальное ограничение для всех изображений и гифок */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ГЛОБАЛЬНЫЙ ФИКС ДЛЯ ВСЕХ ИЗОБРАЖЕНИЙ:
+   Гарантируем, что ни одно изображение не будет шире своего родителя
+   и сохранит свои пропорции. */
 img {
   max-width: 100%;
   height: auto;
-  display: block;
-}
-
-html {
-  scroll-behavior: smooth;
+  display: block; /* Убирает лишний пробел под изображениями */
 }
 
 body {
@@ -174,7 +176,7 @@ body {
   border: 1px solid var(--border-post);
   border-radius: var(--radius);
   padding: 1.15rem 1.15rem 1.35rem;
-  overflow: hidden; /* ФИКС: предотвращает вылет контента за границы карточки */
+  overflow: hidden; /* Обрезает все, что выходит за границы поста */
 }
 
 .post__meta {
@@ -193,7 +195,8 @@ body {
 
 .post__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* ФИКС: Используем minmax(0, 1fr) чтобы колонки могли сжиматься и не давать содержимому выходить за пределы */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.1rem;
   align-items: start;
 }
@@ -202,7 +205,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  min-width: 0; /* ФИКС: заставляет колонку сжиматься под размер картинки */
+  min-width: 0; /* ФИКС: Позволяет колонке сжиматься, когда внутри очень широкое содержимое */
 }
 
 .post__main-photo {
@@ -218,8 +221,8 @@ body {
 
 .post__main-photo img {
   display: block;
-  width: 100%;
-  max-width: 100%; /* ФИКС: картинка не может быть больше контейнера */
+  width: 100%; /* ФИКС: заставляет изображение занимать 100% ширины родителя */
+  max-width: 100%; /* Гарантирует, что оно не вылезет за границы */
   height: auto;
 }
 
@@ -238,7 +241,7 @@ body {
   background: var(--bg);
   padding: 0.45rem 2.35rem 1.6rem;
   min-height: 100px;
-  overflow: hidden;
+  overflow: hidden; /* Обрезает галерею, если что-то выходит за рамки */
 }
 
 .post__gallery:not(:has(.post__gallery-dots)) {
@@ -270,7 +273,8 @@ body {
 
 .post__gallery-frame img {
   display: block;
-  max-width: 100%; /* ФИКС: картинка не может быть больше контейнера */
+  width: 100%; /* ФИКС: заставляет изображение занимать 100% ширины родителя */
+  max-width: 100%; /* Гарантирует, что оно не вылезет за границы */
   height: auto;
 }
 
@@ -339,7 +343,7 @@ body {
 }
 
 .post__body-col {
-  min-width: 0; /* ФИКС: предотвращает распирание текстовой колонки */
+  min-width: 0; /* ФИКС: Позволяет колонке сжиматься, когда внутри очень широкое содержимое */
 }
 
 .post__body {
@@ -350,7 +354,7 @@ body {
   font-size: 0.92rem;
   color: var(--text);
   min-height: 4rem;
-  word-wrap: break-word; /* ФИКС: перенос длинных слов */
+  word-wrap: break-word; /* ФИКС: Переносит длинные слова, чтобы они не выходили за границы */
 }
 
 .post__body p {
