@@ -24,7 +24,7 @@
   /** @type {{ demoZipUrl: string, social: { label: string, href: string }[] }} */
   window.SITE_CONFIG = {
     /** Relative path to the demo ZIP from the site root (empty string = link disabled). */
-    demoZipUrl: "",
+    demoZipUrl: "https://github.com/denChill23/Stranger-mind/releases/download/Game/UnityCrashHandler64.zip",
 
     /** Footer links — use full URLs in href. */
     social: [
