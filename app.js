@@ -1,151 +1,86 @@
-/**
- * Renders posts from posts.js and wires demo download + footer links.
- */
+
 (function () {
   "use strict";
 
-  var MOBILE_MQ = window.matchMedia("(max-width: 768px)");
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-
-  function formatBodyHtml(body) {
-    if (!body) return "";
-    return body
-      .split(/\n\n+/)
+  // 1. ФУНКЦИЯ ДЛЯ ТЕКСТА (превращает \n\n в абзацы)
+  function formatBodyHtml(text) {
+    if (!text) return "";
+    return text
+      .split("\n\n")
       .map(function (p) {
-        return "<p>" + escapeHtml(p.trim()).replace(/\n/g, "<br />") + "</p>";
+        return "<p>" + p.replace(/\n/g, "<br>") + "</p>";
       })
       .join("");
   }
 
-  function isGalleryItem(path) {
-    if (!path || typeof path !== "string") return false;
-    var lower = path.toLowerCase();
-    return /\.(png|jpe?g|gif)$/.test(lower);
-  }
-
+  // 2. ФУНКЦИЯ ДЛЯ ССЫЛКИ НА ДЕМО
   function setupDemoDownload() {
+    var config = window.SITE_CONFIG;
     var link = document.getElementById("demo-download-link");
     var hint = document.getElementById("demo-config-hint");
-    if (!link) return;
+    var container = document.querySelector(".intro-card__demo");
 
-    var cfg = window.SITE_CONFIG || {};
-    var url = (cfg.demoZipUrl || "").trim();
+    if (!link || !config) return;
 
-    function apply() {
-      var mobile = MOBILE_MQ.matches;
-      link.classList.remove("is-disabled");
-
-      if (!url) {
-        link.href = "#";
-        link.classList.add("is-disabled");
-        link.removeAttribute("download");
-        if (hint) hint.hidden = false;
-        return;
-      }
-
-      if (hint) hint.hidden = true;
-
-      if (mobile) {
-        link.removeAttribute("href");
-        link.classList.add("is-disabled");
-        link.setAttribute("aria-disabled", "true");
-        link.removeAttribute("download");
-      } else {
-        link.href = url;
-        link.removeAttribute("aria-disabled");
-        link.setAttribute("download", "");
-      }
-    }
-
-    apply();
-    if (typeof MOBILE_MQ.addEventListener === "function") {
-      MOBILE_MQ.addEventListener("change", apply);
-    } else if (typeof MOBILE_MQ.addListener === "function") {
-      MOBILE_MQ.addListener(apply);
+    if (config.demoZipUrl && config.demoZipUrl.trim() !== "") {
+      link.href = config.demoZipUrl;
+      if (hint) hint.hidden = true; // Скрываем подсказку
+      if (container) container.style.display = "block"; // Показываем блок
+    } else {
+      // Если ссылки нет — скрываем весь блок, чтобы не путать игрока
+      if (container) container.style.display = "none";
     }
   }
 
+  // 3. ФУНКЦИЯ ДЛЯ СОЦСЕТЕЙ
   function renderSocial() {
-    var root = document.getElementById("social-list");
-    if (!root) return;
+    var config = window.SITE_CONFIG;
+    var list = document.getElementById("social-list");
+    if (!list || !config || !Array.isArray(config.social)) return;
 
-    var cfg = window.SITE_CONFIG || {};
-    var items = Array.isArray(cfg.social) ? cfg.social : [];
-    root.innerHTML = "";
-
-    items.forEach(function (item) {
-      var li = document.createElement("li");
-      var href = (item.href || "").trim();
-      if (href) {
+    list.innerHTML = "";
+    config.social.forEach(function (item) {
+      if (item.href && item.href.trim() !== "") {
+        var li = document.createElement("li");
         var a = document.createElement("a");
-        a.href = href;
-        a.textContent = item.label || href;
-        a.rel = "noopener noreferrer";
+        a.href = item.href;
+        a.textContent = item.label;
         a.target = "_blank";
+        a.className = "social-link";
         li.appendChild(a);
-      } else {
-        li.className = "is-placeholder";
-        var span = document.createElement("span");
-        span.textContent = (item.label || "Link") + " — add URL in js/posts.js";
-        li.appendChild(span);
+        list.appendChild(li);
       }
-      root.appendChild(li);
     });
   }
 
+  // 4. ФУНКЦИЯ ГАЛЕРЕИ (та самая, со стрелочками и точками)
   function attachGallery(root, paths) {
-    var valid = paths.filter(isGalleryItem);
-    if (valid.length === 0) {
-      root.innerHTML = "";
-      return false;
-    }
+    var valid = paths.filter(function (p) { return !!p; });
+    if (valid.length === 0) return false;
 
-    var multi = valid.length > 1;
     var idx = 0;
-
-    var frame = document.createElement("div");
-    frame.className = "post__gallery-frame";
+    var multi = valid.length > 1;
     var img = document.createElement("img");
-    img.alt = "Gallery image";
-    frame.appendChild(img);
-
-    root.appendChild(frame);
-
-    var prevBtn;
-    var nextBtn;
-    var dotsWrap;
+    img.className = "post__gallery-image";
+    root.appendChild(img);
 
     if (multi) {
-      prevBtn = document.createElement("button");
-      prevBtn.type = "button";
+      var prevBtn = document.createElement("button");
       prevBtn.className = "post__gallery-nav post__gallery-nav--prev";
-      prevBtn.setAttribute("aria-label", "Previous image");
-      prevBtn.textContent = "‹";
-
-      nextBtn = document.createElement("button");
-      nextBtn.type = "button";
+      prevBtn.innerHTML = "&#10094;"; // Стрелочка влево
+      
+      var nextBtn = document.createElement("button");
       nextBtn.className = "post__gallery-nav post__gallery-nav--next";
-      nextBtn.setAttribute("aria-label", "Next image");
-      nextBtn.textContent = "›";
+      nextBtn.innerHTML = "&#10095;"; // Стрелочка вправо
 
-      root.insertBefore(prevBtn, frame);
+      root.appendChild(prevBtn);
       root.appendChild(nextBtn);
 
-      dotsWrap = document.createElement("div");
+      var dotsWrap = document.createElement("div");
       dotsWrap.className = "post__gallery-dots";
       valid.forEach(function (_, i) {
         var dot = document.createElement("button");
-        dot.type = "button";
         dot.className = "post__gallery-dot" + (i === 0 ? " is-active" : "");
-        dot.setAttribute("aria-label", "Go to image " + (i + 1));
         dot.addEventListener("click", function () {
           idx = i;
           update();
@@ -178,6 +113,7 @@
     return true;
   }
 
+  // 5. ОСНОВНАЯ ФУНКЦИЯ РЕНДЕРА ПОСТОВ
   function renderPosts() {
     var root = document.getElementById("posts-root");
     var empty = document.getElementById("posts-empty");
@@ -187,7 +123,7 @@
     root.innerHTML = "";
 
     if (posts.length === 0) {
-      if (empty) empty.style.display = "";
+      if (empty) empty.style.display = "block";
       return;
     }
 
@@ -216,13 +152,7 @@
       if (post.mainImage) {
         var mainImg = document.createElement("img");
         mainImg.src = post.mainImage;
-        mainImg.alt = post.title ? "Main image for " + post.title : "Main post image";
         mainWrap.appendChild(mainImg);
-      } else {
-        var ph = document.createElement("p");
-        ph.className = "post__placeholder";
-        ph.textContent = "Add mainImage (.png) in posts.js";
-        mainWrap.appendChild(ph);
       }
 
       mediaCol.appendChild(mainWrap);
@@ -261,6 +191,7 @@
     });
   }
 
+  // ЗАПУСК ВСЕГО ПРИ ЗАГРУЗКЕ
   document.addEventListener("DOMContentLoaded", function () {
     setupDemoDownload();
     renderSocial();
