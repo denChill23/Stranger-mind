@@ -29,7 +29,7 @@
     /** Footer links — use full URLs in href. */
     social: [
       { label: "Telegram (only for russian users)", href: "https://t.me/justChillDen" },
-      { label: "Discord", href: "" },
+      { label: "Discord", href: "https://t.me/justChillDen" },
     ],
   };
 
