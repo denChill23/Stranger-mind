@@ -54,13 +54,13 @@
       mainImage: "assets/posts/001/Screenshot_77.png", // Путь к главной картинке
       gallery: [
         "assets/posts/001/Stranger_mind__demo_version__FBzh9AyktR-_online-video-cutter.com_.gif", // Доп. картинки (если есть)
-        "assets/posts/001/Stranger_mind__demo_version__4gS6hOlmpk-_online-video-cutter.com_.gif"
+        "assets/posts/001/Stranger_mind__demo_version__4gS6hOlmpk-_online-video-cutter.com_.gif",
       ],
       body: 
         "Finally, I've started the development diary for my game 'Stranger Mind'.\n\n" +
         "Today I fixed all the bugs on the website and added the first download link for the demo. " +
         "Next steps: polishing the player movement and adding the first puzzle."
-    }
+    },
     // {
     //   date: "2026-05-14",
     //   title: "First playable area",
